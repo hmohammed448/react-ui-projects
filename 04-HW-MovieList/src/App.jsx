@@ -13,6 +13,7 @@ function App() {
 
   const API_KEY = "642c00f";
   const fetchSearch = async (query) => {
+    // https://www.omdbapi.com/?t=Batman&apikey=642c00f
     try {
       const response = await fetch(
         `https://www.omdbapi.com/?t=${query}&apikey=${API_KEY}`
