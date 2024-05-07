@@ -37,7 +37,12 @@ const Cards = ({ pass }) => {
         </div>
         <div
           className="picture relative"
-          style={{ width: "50%", height: "300px" }}
+          style={{
+            width: "50%",
+            height: "300px",
+            display: "flex",
+            justifyContent: "end",
+          }}
         >
           <img src={pass.Poster} alt="" className="absolute" />
         </div>
