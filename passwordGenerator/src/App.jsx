@@ -3,21 +3,17 @@ import "./App.css";
 
 function App() {
   const [len, setLength] = useState(8);
-  const [upperCase, setUpperCase] = useState(false);
-  const [lowerCase, setLowerCase] = useState(false);
-  const [numbers, setNumbers] = useState(false);
-  const [characters, setCharacters] = useState(false);
-  const [password, setPassword] = useState("");
+  const [passwordState, setPasswordState] = useState({})
   const passwordRef = useRef(null);
-
+console.log("passwordState", passwordState)
   const passwordGenerator = useCallback(() => {
     let str = "";
     let pass = "";
 
-    if (upperCase) str += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    if (lowerCase) str += "abcdefghijklmnopqrstuvwxyz";
-    if (numbers) str += "1234567890";
-    if (characters) str += "!@#$%^&*()-_=+|[]{};:/?.>";
+    if (passwordState.upperCase) str += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    if (passwordState.lowerCase) str += "abcdefghijklmnopqrstuvwxyz";
+    if (passwordState.numbers) str += "1234567890";
+    if (passwordState.characters) str += "!@#$%^&*()-_=+|[]{};:/?.>";
 
     for (let i = 1; i <= len; i++) {
       let char = Math.floor(Math.random() * str.length);
@@ -27,16 +23,23 @@ function App() {
       alert("Please select anyone checkbox to Generate Password");
       return false;
     }
-    setPassword(pass);
+    handleCheckInput('password', pass)
     return true;
-  }, [upperCase, lowerCase, numbers, characters, len, setPassword]);
+  }, [passwordState, len]);
 
   const copyToClipBoard = () => {
-    if (password !== "") {
-      window.navigator.clipboard.writeText(password);
+    if (passwordState.password !== "") {
+      window.navigator.clipboard.writeText(passwordState.password);
       alert("Password Copied to Clipboard");
     }
   };
+
+  const handleCheckInput = (name, value) => {
+    setPasswordState({
+      ...passwordState,
+      [name]: value
+    })
+  }
 
   return (
     <>
@@ -46,7 +49,8 @@ function App() {
           <div className="inputArea">
             <input
               type="text"
-              value={password}
+              name="password"
+              value={passwordState.password}
               placeholder="Generated Password..."
               readOnly
               className="bg-slate-300 rounded-lg p-2 my-4 mx-2"
@@ -73,33 +77,41 @@ function App() {
             </div>
             <div className="fieldsChild flex justify-start">
               <input
+              name="upperCase"
                 type="checkbox"
-                defaultChecked={upperCase}
-                onChange={() => setUpperCase((prev) => !prev)}
+                defaultChecked={passwordState.upperCase}
+                value={passwordState.upperCase}
+                onChange={(e) => handleCheckInput(e.target.name, e.target.checked)}
               />
               <span className="mx-2">Include upper case</span>
             </div>
             <div className="fieldsChild flex justify-start">
               <input
+              name="lowerCase"
                 type="checkbox"
-                defaultChecked={lowerCase}
-                onChange={() => setLowerCase((prev) => !prev)}
+                defaultChecked={passwordState.lowerCase}
+                value={passwordState.lowerCase}
+                onChange={(e) => handleCheckInput(e.target.name, e.target.checked)}
               />
               <span className="mx-2">Include Lower Case</span>
             </div>
             <div className="fieldsChild flex justify-start">
               <input
+              name="numbers"
                 type="checkbox"
-                defaultChecked={numbers}
-                onChange={() => setNumbers((prev) => !prev)}
+                defaultChecked={passwordState.numbers}
+                value={passwordState.numbers}
+                onChange={(e) => handleCheckInput(e.target.name, e.target.checked)}
               />
               <span className="mx-2">Include Numbers</span>
             </div>
             <div className="fieldsChild flex justify-start">
               <input
+              name="characters"
                 type="checkbox"
-                defaultChecked={characters}
-                onChange={() => setCharacters((prev) => !prev)}
+                defaultChecked={passwordState.characters}
+                value={passwordState.characters}
+                onChange={(e) => handleCheckInput(e.target.name, e.target.checked)}
               />
               <span className="mx-2">Include Symbols</span>
             </div>
